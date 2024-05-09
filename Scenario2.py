@@ -21,11 +21,19 @@ class RLAgent:
         self.lr=lr
         self.epsilon=epsilon
         self.actions=actions
+        self.env=env
+        self.visited=set()
+
+   def reset(self):
+        self.visited.clear()
 
    def current_state(self):
-        position = self.env.getPosition
-        packages_left=self.env.getPackagesRemaining
-        return (position[0],position[1],packages_left)
+        position = self.env.getPosition()
+        packages_left=self.env.getPackagesRemaining()
+        position_tuple = tuple(position)  
+        visited = position_tuple in self.visited
+        self.visited.add(position_tuple)
+        return (position[0], position[1], packages_left, visited)
    
    def update(self, state, action, reward, next_state):
         best_action = np.argmax(self.Q_table[next_state])
@@ -50,7 +58,7 @@ class RLAgent:
    def state_index(self, position, packages_left, packages_collected):
         position_index = position[0] * 11 + position[1]
         pkg_index = self.package_index(packages_collected)
-        total_position_states = 11*11  # 121 positions
+        total_position_states = 11*11
         num_package_states = 2*len(packages_collected)
         return position_index * num_package_states + pkg_index
    
@@ -61,32 +69,46 @@ class RLAgent:
          packages_collected[p] = True
         return packages_collected
    
+   def calculate_reward(self,isTerminal,packages_remaining_before, packages_remaining_after):
+        reward=-2
+        new_packages=packages_remaining_before-packages_remaining_after
+        reward+=8*new_packages
+        if isTerminal:
+            if packages_remaining_after == 0:
+              reward+=40
+        else:
+            reward-=30
+        #reward = -5 if not isTerminal else 0 
+        return reward
+        
+   
    
 
 
 def main():
     lr=0.1
-    df=0.9
-    epsilon=0
+    df=0.99
+    epsilon=0.1
     action_space={0,1,2,3}
     n_episodes =100
-    states=11*11*8
+    states=11*11*8*2
     actions=len(action_space)
     env = FourRooms('multi',False)
     agent=RLAgent(states,actions,lr,df,epsilon, env)
     packages_collected={False,False,False}
 
-    episodes = 100
     for e in range(n_episodes):
         env.newEpoch()
+        agent.reset()
         while not env.isTerminal():
             current_position = env.getPosition()
             packages_left = env.getPackagesRemaining()
             packages_collected=agent.env_package_collected(env.getPackagesRemaining())
+            packages_remaining_before=3-env.getPackagesRemaining()
             state_index = agent.state_index(current_position, packages_left,packages_collected)
             action = agent.choose_action(state_index)
-            e, newPos, packagesRemaining, isTerminal = env.takeAction(action)
-            reward = -1 if not isTerminal else 0 
+            _, newPos, packagesRemaining, isTerminal = env.takeAction(action)
+            reward = agent.calculate_reward(isTerminal,packages_remaining_before,env.getPackagesRemaining())
             next_state_index = agent.state_index(newPos, packagesRemaining, packages_collected)
             agent.update(state_index, action, reward, next_state_index)
     env.showPath(-1)

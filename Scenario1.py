@@ -55,7 +55,6 @@ def main():
     env = FourRooms('simple',False)
     agent=RLAgent(states,actions,lr,df,epsilon, env)
 
-    episodes = 100
     for e in range(n_episodes):
         env.newEpoch()
         while not env.isTerminal():
@@ -64,7 +63,7 @@ def main():
             state_index = agent.state_index(current_position, packages_left)
             action = agent.choose_action(state_index)
             e, newPos, packagesRemaining, isTerminal = env.takeAction(action)
-            reward = -1 if not isTerminal else 0 
+            reward = -2 if not isTerminal else 0 
             next_state_index = agent.state_index(newPos, packagesRemaining)
             agent.update(state_index, action, reward, next_state_index)
     env.showPath(-1)
