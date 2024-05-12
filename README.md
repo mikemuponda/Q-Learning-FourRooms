@@ -19,9 +19,10 @@ There is a 4th scenario however and which adds a stochastic element to the actio
 Scenario 1 : 
 Agent uses Q-table with a fixed size according to the number of states defined by grid size and action space size 11 x 11 x 4
 Agent uses a state indexing function based on the indexing formula position[0]*11 + position[1]*packages_left+ (11*11)
-Epsilon is fixed
-State is based on just postion and packagesRemaining
+Epsilon value is fixed and algorithm is mostly greedy when choosing actions
+State is based on just position and packagesRemaining variables
 Very simple reward function just based on reaching the terminal state ie package picked up
+
 
 Scenario 2 :
 Agent uses dictionary as Qtable to take advantage of key mapping, states are looked up as keys in the table
@@ -31,9 +32,10 @@ State now adds cellType variable for whether an agent is in a cell of type 0 (em
 More advannced reward function that takes into account the packages collected and optimal path
 
 Scenario 3:
-The main difference from Scenario 2 now is that agent adds order of package collection to the state under the variable packages_collected
-Reward function also penalizes incorrect order of package collection 
-Epsilon has decay function but in practice this is kept tight 
+The main difference from Scenario 2 now is that agent adds order of package collection to the state under the variable packages_collected and the correct states here would be [1], [1,2],[1,2,3]
+Reward function penalizes incorrect order of package collection but also gives partial rewards for intermediate correct states [1], [1,2] but also rewards the final state linearly 
+Epsilon has decay function but in practice this is kept tight, going above 0.2 yielded not so great results
+Agent is not very efficient due to the difficulty in balancing prioritizing order and efficient routes
 
 
 
