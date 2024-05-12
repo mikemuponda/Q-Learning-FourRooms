@@ -17,7 +17,7 @@ There is a 4th scenario however and which adds a stochastic element to the actio
 
 
 Scenario 1 : 
-Agent uses Q-table with a fixed size according to the number of states defined by grid size and action space size 11*11*4
+Agent uses Q-table with a fixed size according to the number of states defined by grid size and action space size 11 x 11 x 4
 Agent uses a state indexing function based on the indexing formula position[0]*11 + position[1]*packages_left+ (11*11)
 Epsilon is fixed
 State is based on just postion and packagesRemaining
