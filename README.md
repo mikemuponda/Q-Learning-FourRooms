@@ -29,7 +29,7 @@ Agent uses dictionary as Qtable to take advantage of key mapping, states are loo
 Qtable size is now dynamic and agents can directly look up states without indexes
 Epsilon is now a decaying function however restricted to a narrow range
 State now adds cellType variable for whether an agent is in a cell of type 0 (empty) 1 (Red) 2 (Green) 3 (Blue)
-More advannced reward function that takes into account the packages collected and optimal path
+More advanced reward function that takes into account the packages collected and optimal path
 
 Scenario 3:
 The main difference from Scenario 2 now is that agent adds order of package collection to the state under the variable packages_collected and the correct states here would be [1], [1,2],[1,2,3]
