@@ -62,7 +62,7 @@ def main():
             packages_left = env.getPackagesRemaining()
             state_index = agent.state_index(current_position, packages_left)
             action = agent.choose_action(state_index)
-            e, newPos, packagesRemaining, isTerminal = env.takeAction(action)
+            cellType, newPos, packagesRemaining, isTerminal = env.takeAction(action)
             reward = -2 if not isTerminal else 0 
             next_state_index = agent.state_index(newPos, packagesRemaining)
             agent.update(state_index, action, reward, next_state_index)
