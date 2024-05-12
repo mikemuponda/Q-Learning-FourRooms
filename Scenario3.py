@@ -79,7 +79,7 @@ class RLAgent:
 
 def main():
     lr = 0.1
-    df = 0.95
+    df = 0.8
     epsilon = 0.1
     n_episodes = 1000
     env = FourRooms('rgb', False)
