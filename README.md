@@ -2,7 +2,7 @@
 
 
 #about the project
-The project is an implementation of Reincofecement Learning to teach RL ageants how to pick up packages in a 13*13 gridworld using Q-learning Algorithm.
+The project is an implementation of Reinforcement Learning to teach RL ageants how to pick up packages in a 13*13 gridworld using Q-learning Algorithm.
 The agent will pick up the packages from the environment based on 3 main scenarios which are :
 
 1) Simple Package Collection (Scenario1.py)
@@ -13,8 +13,29 @@ The agent will pick up the packages from the environment based on 3 main scenari
    Teh agent has to locate and pick up three packages each marked red(R),green(G) and blue(B) and they must be collected
    in the same order R -> G -> B
 
-There is a 4th scenario however and which adds a stochastic element to the action space such that when the RL agents take action
-there will be a 20% chance they move to a different grid than the expected one thus adding some randomness
+There is a 4th scenario however and which adds a stochastic element to the action space such that when the RL agents take action there will be a 20% chance they move to a different grid than the expected one thus adding some randomness
+
+
+Scenario 1 : 
+Agent uses Q-table with a fixed size according to the number of states defined by grid size and action space size 11*11*4
+Agent uses a state indexing function based on the indexing formula position[0]*11 + position[1]*packages_left+ (11*11)
+Epsilon is fixed
+State is based on just postion and packagesRemaining
+Very simple reward function just based on reaching the terminal state ie package picked up
+
+Scenario 2 :
+Agent uses dictionary as Qtable to take advantage of key mapping, states are looked up as keys in the table
+Qtable size is now dynamic and agents can directly look up states without indexes
+Epsilon is now a decaying function however restricted to a narrow range
+State now adds cellType variable for whether an agent is in a cell of type 0 (empty) 1 (Red) 2 (Green) 3 (Blue)
+More advannced reward function that takes into account the packages collected and optimal path
+
+Scenario 3:
+The main difference from Scenario 2 now is that agent adds order of package collection to the state under the variable packages_collected
+Reward function also penalizes incorrect order of package collection 
+Epsilon has decay function but in practice this is kept tight 
+
+
 
 
 
